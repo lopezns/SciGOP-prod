@@ -19,5 +19,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+        
+        // Seed cafe data
+        $this->call([
+            ClienteSeeder::class,
+            ProductoSeeder::class,
+            FacturaVentaSeeder::class,
+        ]);
     }
 }

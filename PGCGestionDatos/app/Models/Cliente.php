@@ -33,10 +33,11 @@ class Cliente extends Model
         return $this->hasMany(FacturaVenta::class);
     }
     
-    public function pagos()
-    {
-        return $this->hasMany(PagoCliente::class);
-    }
+    // Nota: PagoCliente no implementado aún
+    // public function pagos()
+    // {
+    //     return $this->hasMany(PagoCliente::class);
+    // }
     
     // Scopes
     public function scopeBuscar($query, $termino)

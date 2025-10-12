@@ -93,4 +93,26 @@ Route::prefix('cafe')->name('cafe.')->group(function () {
     
     // Reportes
     Route::get('/reportes', [\App\Http\Controllers\Cafe\ReporteController::class, 'index'])->name('reportes.index');
+    
+    // Inventario
+    Route::get('/inventario', [\App\Http\Controllers\Cafe\InventarioController::class, 'index'])->name('inventario.index');
+    Route::get('/inventario/movimientos', [\App\Http\Controllers\Cafe\InventarioController::class, 'movimientos'])->name('inventario.movimientos');
+    Route::get('/inventario/ajustar', [\App\Http\Controllers\Cafe\InventarioController::class, 'ajustar'])->name('inventario.ajustar');
+    Route::post('/inventario/ajustar', [\App\Http\Controllers\Cafe\InventarioController::class, 'procesarAjuste'])->name('inventario.procesar-ajuste');
+    Route::get('/inventario/reporte', [\App\Http\Controllers\Cafe\InventarioController::class, 'reporte'])->name('inventario.reporte');
+    
+    // Proveedores
+    Route::resource('proveedores', \App\Http\Controllers\Cafe\ProveedorController::class)->parameters([
+        'proveedores' => 'proveedor'
+    ]);
+    
+    // Compras
+    Route::resource('compras', \App\Http\Controllers\Cafe\CompraController::class);
+    Route::post('/compras/{compra}/recibir', [\App\Http\Controllers\Cafe\CompraController::class, 'recibir'])->name('compras.recibir');
+    
+    // Sistema POS
+    Route::get('/pos', [\App\Http\Controllers\Cafe\POSController::class, 'index'])->name('pos.index');
+    Route::post('/pos/procesar', [\App\Http\Controllers\Cafe\POSController::class, 'procesarVenta'])->name('pos.procesar');
+    Route::get('/pos/search', [\App\Http\Controllers\Cafe\POSController::class, 'searchProducts'])->name('pos.search');
+    Route::get('/pos/factura/{id}', [\App\Http\Controllers\Cafe\POSController::class, 'mostrarFactura'])->name('pos.factura');
 });

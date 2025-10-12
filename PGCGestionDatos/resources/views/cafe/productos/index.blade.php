@@ -79,8 +79,8 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-coffee-900">
-                                        <div>Compra: ${{ number_format($producto->precio_compra, 0, ',', '.') }}</div>
-                                        <div class="font-semibold">Venta: ${{ number_format($producto->precio_venta, 0, ',', '.') }}</div>
+                                        <div>Compra: ${{ number_format($producto->precio_compra, 0, '.', ',') }} COP</div>
+                                        <div class="font-semibold">Venta: ${{ number_format($producto->precio_venta, 0, '.', ',') }} COP</div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -115,15 +115,11 @@
                                     <a href="{{ route('cafe.productos.edit', $producto) }}" class="text-blue-600 hover:text-blue-900">
                                         ✏️
                                     </a>
-                                    <form method="POST" action="{{ route('cafe.productos.destroy', $producto) }}" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
-                                                class="text-red-600 hover:text-red-900"
-                                                onclick="return confirm('¿Estás seguro de que quieres eliminar este producto?')">
-                                            🗑️
-                                        </button>
-                                    </form>
+                                    <button type="button" 
+                                            class="text-red-600 hover:text-red-900"
+                                            onclick="openDeleteModal('{{ $producto->id }}', '{{ $producto->nombre }}', '{{ route('cafe.productos.destroy', $producto) }}')">
+                                        🗑️
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -181,4 +177,71 @@
         </div>
     @endif
 </div>
+
+<!-- Modal de confirmación de eliminación -->
+<div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                        <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">
+                        ¿Eliminar producto?
+                    </h3>
+                    <p class="text-sm text-gray-500 mb-4">
+                        Estás a punto de eliminar el producto <strong id="productName"></strong>. 
+                        Esta acción no se puede deshacer.
+                    </p>
+                </div>
+                <div class="flex space-x-3 justify-end">
+                    <button type="button" 
+                            onclick="closeDeleteModal()" 
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coffee-500">
+                        Cancelar
+                    </button>
+                    <form id="deleteForm" method="POST" class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" 
+                                class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Sí, eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openDeleteModal(productId, productName, deleteUrl) {
+    document.getElementById('productName').textContent = productName;
+    document.getElementById('deleteForm').action = deleteUrl;
+    document.getElementById('deleteModal').classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+}
+
+// Cerrar modal al hacer clic fuera de él
+document.getElementById('deleteModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeDeleteModal();
+    }
+});
+
+// Cerrar modal con tecla Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeDeleteModal();
+    }
+});
+</script>
 @endsection

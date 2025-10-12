@@ -38,28 +38,40 @@ class AuthController extends Controller
             'remember' => 'nullable',
         ]);
 
+        // Debug: Log the attempt
+        \Log::info('Login attempt', ['email' => $validated['email']]);
+
         // Buscar usuario en la base de datos
         $usuario = Usuario::where('email', $validated['email'])
                          ->where('activo', true)
                          ->first();
 
-        if ($usuario && Hash::check($validated['password'], $usuario->password)) {
-            Session::put('user', [
-                'id' => $usuario->id,
-                'name' => $usuario->nombre,
-                'email' => $usuario->email,
-                'rol_id' => $usuario->rol_id
-            ]);
-
-            // Remember cookie (30 days)
-            if ($request->boolean('remember')) {
-                cookie()->queue('remember_user', $validated['email'], 43200);
-            }
-
-            return Redirect::route('cafe.dashboard');
+        if (!$usuario) {
+            \Log::warning('User not found or inactive', ['email' => $validated['email']]);
+            return Redirect::back()->withErrors(['email' => 'Usuario no encontrado o inactivo'])->withInput();
         }
 
-        return Redirect::back()->withErrors(['email' => 'Credenciales inválidas'])->withInput();
+        if (!Hash::check($validated['password'], $usuario->password)) {
+            \Log::warning('Invalid password', ['email' => $validated['email']]);
+            return Redirect::back()->withErrors(['email' => 'Contraseña incorrecta'])->withInput();
+        }
+
+        // Login exitoso
+        \Log::info('Login successful', ['user_id' => $usuario->id, 'email' => $usuario->email]);
+        
+        Session::put('user', [
+            'id' => $usuario->id,
+            'name' => $usuario->nombre,
+            'email' => $usuario->email,
+            'rol_id' => $usuario->rol_id
+        ]);
+
+        // Remember cookie (30 days)
+        if ($request->boolean('remember')) {
+            cookie()->queue('remember_user', $validated['email'], 43200);
+        }
+
+        return Redirect::route('cafe.dashboard');
     }
 
     /**

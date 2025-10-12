@@ -68,12 +68,12 @@
                     
                     <div class="text-center p-4 bg-cream-50 rounded-lg">
                         <div class="text-sm text-coffee-600 mb-1">Precio de Venta</div>
-                        <div class="text-2xl font-bold text-green-600">${{ number_format($producto->precio_venta, 2) }}</div>
+                        <div class="text-2xl font-bold text-green-600">${{ number_format($producto->precio_venta, 0, '.', ',') }} COP</div>
                     </div>
                     
                     <div class="text-center p-4 bg-cream-50 rounded-lg">
                         <div class="text-sm text-coffee-600 mb-1">Precio de Compra</div>
-                        <div class="text-2xl font-bold text-coffee-800">${{ number_format($producto->precio_compra, 2) }}</div>
+                        <div class="text-2xl font-bold text-coffee-800">${{ number_format($producto->precio_compra, 0, '.', ',') }} COP</div>
                     </div>
                 </div>
 
@@ -84,11 +84,11 @@
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between">
                                 <span class="text-coffee-600">Precio de compra:</span>
-                                <span class="text-coffee-800 font-medium">${{ number_format($producto->precio_compra, 2) }}</span>
+                                <span class="text-coffee-800 font-medium">${{ number_format($producto->precio_compra, 0, '.', ',') }} COP</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-coffee-600">Precio de venta:</span>
-                                <span class="text-coffee-800 font-medium">${{ number_format($producto->precio_venta, 2) }}</span>
+                                <span class="text-coffee-800 font-medium">${{ number_format($producto->precio_venta, 0, '.', ',') }} COP</span>
                             </div>
                             @if($producto->precio_compra > 0)
                                 @php
@@ -97,7 +97,7 @@
                                 @endphp
                                 <div class="flex justify-between border-t border-cream-200 pt-2">
                                     <span class="text-coffee-600">Ganancia unitaria:</span>
-                                    <span class="text-green-600 font-medium">${{ number_format($ganancia, 2) }}</span>
+                                    <span class="text-green-600 font-medium">${{ number_format($ganancia, 0, '.', ',') }} COP</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-coffee-600">Margen de ganancia:</span>

@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SciGOP - Iniciar Sesión</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .login-container {
@@ -126,7 +132,7 @@
                         value="{{ old('email') }}"
                         required
                         class="input-focus w-full px-4 py-3 border border-orange-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200"
-                        placeholder="admin@scigop.com"
+                        placeholder="test@scigop.com"
                     >
                 </div>
 
@@ -158,13 +164,25 @@
                     </label>
                 </div>
 
-                <!-- Submit button -->
-                <button 
-                    type="submit" 
-                    class="btn-hover w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300"
-                >
-                    Iniciar Sesión
-                </button>
+                <!-- Buttons -->
+                <div class="space-y-3">
+                    <!-- Auto-fill button -->
+                    <button 
+                        type="button" 
+                        id="autoFillBtn"
+                        class="btn-hover w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300"
+                    >
+                        🚀 Llenar automáticamente
+                    </button>
+                    
+                    <!-- Submit button -->
+                    <button 
+                        type="submit" 
+                        class="btn-hover w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300"
+                    >
+                        Iniciar Sesión
+                    </button>
+                </div>
             </form>
 
             <!-- Register link -->
@@ -177,13 +195,41 @@
                 </p>
             </div>
         </div>
-
-        <!-- Demo credentials -->
-        <div class="float-animation mt-6 bg-white/10 backdrop-blur-sm rounded-lg p-4 text-white text-sm">
-            <h4 class="font-semibold mb-2">🔑 Credenciales de prueba:</h4>
-            <p><strong>Email:</strong> admin@scigop.com</p>
-            <p><strong>Contraseña:</strong> scigop2024</p>
-        </div>
     </div>
+
+    <script>
+        document.getElementById('autoFillBtn').addEventListener('click', function() {
+            // Llenar los campos automáticamente
+            document.getElementById('email').value = 'test@scigop.com';
+            document.getElementById('password').value = 'scigop2025';
+            document.getElementById('remember').checked = true;
+            
+            // Agregar efectos visuales
+            const emailField = document.getElementById('email');
+            const passwordField = document.getElementById('password');
+            
+            emailField.style.animation = 'pulse 0.5s ease-in-out';
+            passwordField.style.animation = 'pulse 0.5s ease-in-out';
+            
+            // Auto-submit después de un breve delay para que el usuario vea el autocompletado
+            setTimeout(function() {
+                // Cambiar el texto del botón
+                const submitBtn = document.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '⚡ Ingresando...';
+                submitBtn.disabled = true;
+                
+                // Hacer submit del formulario
+                document.querySelector('form').submit();
+            }, 1000);
+        });
+    </script>
+    
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); }
+            100% { transform: scale(1); }
+        }
+    </style>
 </body>
 </html>

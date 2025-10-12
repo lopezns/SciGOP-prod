@@ -1,159 +1,211 @@
 @extends('layouts.cafe')
 
-@section('title', 'Facturas')
-@section('subtitle', 'Historial de facturas emitidas')
+@section('title', 'Facturas Emitidas')
+@section('subtitle', 'Registro de todas las facturas del sistema')
+
+@section('actions')
+    <a href="{{ route('cafe.pos.index') }}" class="inline-flex items-center px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors duration-200">
+        <span class="mr-2">💳</span>
+        Realizar Venta
+    </a>
+@endsection
 
 @section('content')
-<div class="space-y-6">
-    <!-- Header con botones de acción -->
-    <div class="flex justify-between items-center">
-        <div class="flex space-x-4">
-            <!-- Búsqueda -->
-            <form method="GET" class="flex space-x-2">
-                <input type="text" 
-                       name="search" 
-                       value="{{ request('search') }}"
-                       placeholder="Buscar facturas..."
-                       class="px-4 py-2 border border-cream-300 rounded-lg focus:ring-2 focus:ring-coffee-500 focus:border-transparent">
-                
-                <!-- Filtros -->
-                <select name="estado" class="px-4 py-2 border border-cream-300 rounded-lg focus:ring-2 focus:ring-coffee-500">
-                    <option value="">Todos los estados</option>
-                    <option value="pagada">Pagadas</option>
-                    <option value="pendiente">Pendientes</option>
-                    <option value="cancelada">Canceladas</option>
-                </select>
-                
-                <button type="submit" class="px-4 py-2 bg-coffee-600 text-white rounded-lg hover:bg-coffee-700">
-                    Filtrar
-                </button>
-                
-                @if(request('search') || request('estado'))
-                    <a href="{{ route('cafe.facturas.index') }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
-                        Limpiar
-                    </a>
-                @endif
-            </form>
+<!-- Filtros -->
+<div class="mb-6 bg-white rounded-xl shadow-sm border border-orange-200 p-6">
+    <div class="flex flex-wrap items-center gap-4">
+        <div class="flex-1 min-w-64">
+            <label class="block text-sm font-medium text-amber-800 mb-2">Buscar factura</label>
+            <input type="text" 
+                   name="search" 
+                   value="{{ request('search') }}"
+                   placeholder="Número de factura, cliente..."
+                   class="w-full px-4 py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent">
         </div>
         
-        <a href="{{ route('cafe.ventas.create') }}" class="btn btn-primary">
-            📄 Nueva Venta/Factura
-        </a>
+        <div>
+            <label class="block text-sm font-medium text-amber-800 mb-2">Estado</label>
+            <select name="estado" class="px-4 py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                <option value="">Todos</option>
+                <option value="pagada">Pagadas</option>
+                <option value="pendiente">Pendientes</option>
+                <option value="anulada">Anuladas</option>
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-sm font-medium text-amber-800 mb-2">Fecha desde</label>
+            <input type="date" class="px-4 py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+        </div>
+        
+        <div>
+            <label class="block text-sm font-medium text-amber-800 mb-2">Fecha hasta</label>
+            <input type="date" class="px-4 py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+        </div>
+        
+        <div class="flex items-end">
+            <button class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition-colors duration-200 font-medium">
+                Filtrar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Resumen de facturas -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+    <div class="bg-white rounded-lg shadow-sm border border-orange-200 p-6 text-center">
+        <div class="text-3xl font-bold text-amber-800">124</div>
+        <div class="text-sm font-medium text-amber-600 mt-1">Total Facturas</div>
+        <div class="text-xs text-amber-600 mt-1">Este mes</div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-orange-200 p-6 text-center">
+        <div class="text-3xl font-bold text-green-600">$15.420.000 COP</div>
+        <div class="text-sm font-medium text-amber-600 mt-1">Facturado</div>
+        <div class="text-xs text-green-600 mt-1">Este mes</div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-orange-200 p-6 text-center">
+        <div class="text-3xl font-bold text-yellow-600">8</div>
+        <div class="text-sm font-medium text-amber-600 mt-1">Pendientes</div>
+        <div class="text-xs text-yellow-600 mt-1">Por cobrar</div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-orange-200 p-6 text-center">
+        <div class="text-3xl font-bold text-red-600">2</div>
+        <div class="text-sm font-medium text-amber-600 mt-1">Anuladas</div>
+        <div class="text-xs text-red-600 mt-1">Este mes</div>
+    </div>
+</div>
+
+<!-- Tabla de facturas -->
+<div class="bg-white rounded-xl shadow-sm border border-orange-200 overflow-hidden">
+    <div class="p-6 border-b border-orange-100">
+        <h2 class="text-lg font-semibold text-amber-800">Facturas Emitidas</h2>
     </div>
 
-    <!-- Resumen de facturas -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="card text-center">
-            <div class="text-2xl font-bold text-coffee-800">{{ number_format($totalFacturas) }}</div>
-            <div class="text-sm text-coffee-600">Total Facturas</div>
-        </div>
-        <div class="card text-center">
-            <div class="text-2xl font-bold text-green-600">${{ number_format($ventasMes, 0, ',', '.') }}</div>
-            <div class="text-sm text-coffee-600">Ventas del Mes</div>
-        </div>
-        <div class="card text-center">
-            <div class="text-2xl font-bold text-yellow-600">{{ number_format($pendientes) }}</div>
-            <div class="text-sm text-coffee-600">Pendientes</div>
-        </div>
-        <div class="card text-center">
-            <div class="text-2xl font-bold text-red-600">{{ number_format($canceladas) }}</div>
-            <div class="text-sm text-coffee-600">Canceladas</div>
-        </div>
-    </div>
-
-    <!-- Lista de facturas -->
-    <div class="card overflow-hidden">
-        @if($facturas->count() > 0)
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-cream-200">
-                    <thead class="bg-cream-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-coffee-600 uppercase tracking-wider">
-                                Factura
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-coffee-600 uppercase tracking-wider">
-                                Cliente
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-coffee-600 uppercase tracking-wider">
-                                Fecha
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-coffee-600 uppercase tracking-wider">
-                                Total
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-coffee-600 uppercase tracking-wider">
-                                Estado
-                            </th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-coffee-600 uppercase tracking-wider">
-                                Acciones
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-cream-100">
-                        @foreach($facturas as $factura)
-                            <tr class="hover:bg-cream-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-coffee-900">{{ $factura->numero_factura }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-coffee-900">{{ $factura->cliente->nombre }}</div>
-                                    <div class="text-sm text-coffee-500">{{ $factura->cliente->tipo_documento }}: {{ $factura->cliente->numero_documento }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-coffee-900">{{ $factura->fecha->format('d/m/Y') }}</div>
-                                    <div class="text-sm text-coffee-500">{{ $factura->fecha->diffForHumans() }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-semibold text-coffee-900">${{ number_format($factura->total, 0, ',', '.') }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($factura->estado === 'pagada')
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Pagada
-                                        </span>
-                                    @elseif($factura->estado === 'pendiente')
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            Pendiente
-                                        </span>
-                                    @else
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            Anulada
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                    <a href="{{ route('cafe.facturas.show', $factura->id) }}" class="text-coffee-600 hover:text-coffee-900">
-                                        👁️
-                                    </a>
-                                    <button class="text-blue-600 hover:text-blue-900">
-                                        🖨️
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Paginación -->
-            <div class="px-6 py-4 border-t border-cream-200">
-                {{ $facturas->appends(request()->query())->links() }}
-            </div>
-        @else
-            <div class="text-center py-12">
-                <div class="text-coffee-400 text-6xl mb-4">📄</div>
-                <h3 class="text-lg font-medium text-coffee-900 mb-2">No hay facturas</h3>
-                <p class="text-coffee-600 mb-4">
-                    @if(request('search') || request('estado'))
-                        No se encontraron facturas que coincidan con los filtros aplicados.
-                    @else
-                        Aún no se han generado facturas en el sistema.
-                    @endif
-                </p>
-                <a href="{{ route('cafe.ventas.create') }}" class="btn btn-primary">
-                    ➕ Crear Primera Factura
-                </a>
-            </div>
-        @endif
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-orange-200">
+            <thead class="bg-orange-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-800 uppercase tracking-wider">Factura</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-800 uppercase tracking-wider">Fecha</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-800 uppercase tracking-wider">Cliente</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-800 uppercase tracking-wider">Productos</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-800 uppercase tracking-wider">Total</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-800 uppercase tracking-wider">Estado</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-amber-800 uppercase tracking-wider">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-orange-200">
+                @php
+                    $facturas = [
+                        ['id' => 1, 'numero' => 'F001-00124', 'fecha' => '2024-10-12 14:30', 'cliente' => 'María García', 'documento' => 'DNI: 12345678', 'productos' => 3, 'total' => 85500, 'estado' => 'pagada'],
+                        ['id' => 2, 'numero' => 'F001-00123', 'fecha' => '2024-10-12 13:45', 'cliente' => 'Carlos Ruiz', 'documento' => 'DNI: 87654321', 'productos' => 2, 'total' => 45000, 'estado' => 'pagada'],
+                        ['id' => 3, 'numero' => 'F001-00122', 'fecha' => '2024-10-12 12:15', 'cliente' => 'Cliente General', 'documento' => '', 'productos' => 1, 'total' => 12500, 'estado' => 'pagada'],
+                        ['id' => 4, 'numero' => 'F001-00121', 'fecha' => '2024-10-12 11:30', 'cliente' => 'Ana Torres', 'documento' => 'RUC: 20123456789', 'productos' => 4, 'total' => 120000, 'estado' => 'pendiente'],
+                        ['id' => 5, 'numero' => 'F001-00120', 'fecha' => '2024-10-12 10:45', 'cliente' => 'Luis Méndez', 'documento' => 'DNI: 11223344', 'productos' => 2, 'total' => 67500, 'estado' => 'pagada'],
+                        ['id' => 6, 'numero' => 'F001-00119', 'fecha' => '2024-10-11 16:20', 'cliente' => 'Empresa ABC', 'documento' => 'RUC: 20987654321', 'productos' => 8, 'total' => 245750, 'estado' => 'pendiente'],
+                        ['id' => 7, 'numero' => 'F001-00118', 'fecha' => '2024-10-11 15:10', 'cliente' => 'Patricia López', 'documento' => 'DNI: 55667788', 'productos' => 5, 'total' => 145750, 'estado' => 'pagada'],
+                        ['id' => 8, 'numero' => 'F001-00117', 'fecha' => '2024-10-11 14:25', 'cliente' => 'Roberto Vega', 'documento' => 'DNI: 99887766', 'productos' => 3, 'total' => 92250, 'estado' => 'anulada']
+                    ];
+                @endphp
+                
+                @forelse($facturas as $factura)
+                <tr class="hover:bg-orange-50 transition-colors duration-200">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-amber-900">{{ $factura['numero'] }}</div>
+                        <div class="text-sm text-amber-600">#{{ str_pad($factura['id'], 6, '0', STR_PAD_LEFT) }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-amber-700">
+                        <div>{{ date('d/m/Y', strtotime($factura['fecha'])) }}</div>
+                        <div class="text-xs text-amber-600">{{ date('H:i', strtotime($factura['fecha'])) }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-8 w-8">
+                                <div class="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center">
+                                    <span class="text-amber-600 text-xs">👤</span>
+                                </div>
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-amber-900">{{ $factura['cliente'] }}</div>
+                                @if($factura['documento'])
+                                    <div class="text-sm text-amber-600">{{ $factura['documento'] }}</div>
+                                @endif
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-amber-700">
+                        {{ $factura['productos'] }} {{ $factura['productos'] == 1 ? 'producto' : 'productos' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-amber-800">
+                        ${{ number_format($factura['total'], 0, '.', ',') }} COP
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        @php
+                            $estadoConfig = [
+                                'pagada' => ['bg-green-100 text-green-800', '✅ Pagada'],
+                                'pendiente' => ['bg-yellow-100 text-yellow-800', '⏳ Pendiente'],
+                                'anulada' => ['bg-red-100 text-red-800', '❌ Anulada']
+                            ];
+                            $config = $estadoConfig[$factura['estado']] ?? ['bg-gray-100 text-gray-800', '❓ Desconocido'];
+                        @endphp
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $config[0] }}">
+                            {{ $config[1] }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                        <div class="flex items-center justify-center space-x-2">
+                            <a href="{{ route('cafe.facturas.show', $factura['id']) }}" 
+                               class="text-amber-600 hover:text-amber-900 transition-colors duration-200" 
+                               title="Ver factura">
+                                👁️
+                            </a>
+                            <button type="button" 
+                                    onclick="imprimirFactura({{ $factura['id'] }})"
+                                    class="text-blue-600 hover:text-blue-900 transition-colors duration-200" 
+                                    title="Imprimir">
+                                🖨️
+                            </button>
+                            @if($factura['estado'] === 'pagada')
+                            <button type="button" 
+                                    onclick="enviarPorEmail({{ $factura['id'] }})"
+                                    class="text-green-600 hover:text-green-900 transition-colors duration-200" 
+                                    title="Enviar por email">
+                                📧
+                            </button>
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="px-6 py-12 text-center">
+                        <div class="flex flex-col items-center">
+                            <span class="text-6xl mb-4">🧾</span>
+                            <h3 class="text-lg font-medium text-amber-800 mb-2">No hay facturas registradas</h3>
+                            <p class="text-amber-600 mb-4">Las facturas aparecerán aquí cuando realices ventas</p>
+                            <a href="{{ route('cafe.pos.index') }}" 
+                               class="inline-flex items-center px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors duration-200">
+                                <span class="mr-2">💳</span>
+                                Realizar Primera Venta
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+function imprimirFactura(id) {
+    window.open(`{{ url('cafe/pos/factura') }}/${id}`, '_blank');
+}
+
+function enviarPorEmail(id) {
+    alert('Funcionalidad de envío por email en desarrollo');
+}
+</script>
+@endpush

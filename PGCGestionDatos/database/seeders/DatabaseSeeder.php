@@ -22,9 +22,12 @@ class DatabaseSeeder extends Seeder
         
         // Seed cafe data
         $this->call([
+            UsuarioSeeder::class,
             ClienteSeeder::class,
             ProductoSeeder::class,
             FacturaVentaSeeder::class,
+            ProveedorSeeder::class,
+            CompraSeeder::class,
         ]);
     }
 }

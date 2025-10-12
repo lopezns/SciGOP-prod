@@ -7,6 +7,11 @@
 
     <title>SciGOP - @yield('title', 'Dashboard')</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     
@@ -16,83 +21,125 @@
 <body class="font-sans antialiased bg-orange-50">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="p-6">
+        <aside class="w-72 bg-gradient-to-b from-amber-800 to-amber-900 text-white relative min-h-screen flex flex-col">
+            <div class="p-6 flex-1">
                 <div class="flex items-center space-x-3 mb-8">
                     <div class="w-8 h-8 bg-orange-200 rounded-lg flex items-center justify-center">
                         <span class="text-amber-800 font-bold text-lg">☕</span>
                     </div>
-                    <h1 class="font-display text-xl font-bold text-orange-100">SciGOP</h1>
+                    <h1 class="font-display text-xl font-bold text-amber-950" style="color: #451a03 !important;">SciGOP</h1>
                 </div>
 
                 <nav class="space-y-2">
-                    <a href="{{ route('cafe.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.dashboard') ? 'bg-amber-700 text-orange-100' : 'text-orange-300 hover:bg-amber-700 hover:text-orange-100' }} transition-colors duration-200">
+                    <a href="{{ route('cafe.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.dashboard') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
                         <span>📊</span>
                         <span class="font-medium">Dashboard</span>
                     </a>
                     
-                    <div class="pt-4 pb-2">
-                        <h3 class="text-xs uppercase tracking-wider text-orange-400 font-semibold">Inventario</h3>
-                    </div>
-                    
-                    <a href="{{ route('cafe.productos.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.productos.*') ? 'bg-amber-700 text-orange-100' : 'text-orange-300 hover:bg-amber-700 hover:text-orange-100' }} transition-colors duration-200">
-                        <span>☕</span>
-                        <span class="font-medium">Productos</span>
+                    <!-- Punto de Venta -->
+                    <a href="{{ route('cafe.pos.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.pos.*') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
+                        <span>💳</span>
+                        <span class="font-medium">Punto de Venta</span>
+                        <span class="ml-auto bg-green-500 text-white text-xs px-2 py-1 rounded-full">POS</span>
                     </a>
 
                     <div class="pt-4 pb-2">
-                        <h3 class="text-xs uppercase tracking-wider text-orange-400 font-semibold">Ventas</h3>
+                        <h3 class="text-xs uppercase tracking-wider font-semibold" style="color: #451a03 !important;">Ventas</h3>
                     </div>
                     
-                    <a href="{{ route('cafe.ventas.create') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.ventas.create') ? 'bg-amber-700 text-orange-100' : 'text-orange-300 hover:bg-amber-700 hover:text-orange-100' }} transition-colors duration-200">
-                        <span>🛒</span>
-                        <span class="font-medium">Nueva Venta</span>
+                    <a href="{{ route('cafe.ventas.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.ventas.index') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
+                        <span>📋</span>
+                        <span class="font-medium">Historial de Ventas</span>
                     </a>
                     
-                    <a href="{{ route('cafe.facturas.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.facturas.*') ? 'bg-amber-700 text-orange-100' : 'text-orange-300 hover:bg-amber-700 hover:text-orange-100' }} transition-colors duration-200">
+                    <a href="{{ route('cafe.facturas.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.facturas.*') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
                         <span>🧾</span>
                         <span class="font-medium">Facturas</span>
                     </a>
 
                     <div class="pt-4 pb-2">
-                        <h3 class="text-xs uppercase tracking-wider text-orange-400 font-semibold">Clientes</h3>
+                        <h3 class="text-xs uppercase tracking-wider font-semibold" style="color: #451a03 !important;">Inventario</h3>
                     </div>
                     
-                    <a href="{{ route('cafe.clientes.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.clientes.*') ? 'bg-amber-700 text-orange-100' : 'text-orange-300 hover:bg-amber-700 hover:text-orange-100' }} transition-colors duration-200">
+                    <a href="{{ route('cafe.productos.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.productos.*') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
+                        <span>☕</span>
+                        <span class="font-medium">Productos</span>
+                    </a>
+                    
+                    <a href="{{ route('cafe.inventario.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.inventario.*') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
+                        <span>📦</span>
+                        <span class="font-medium">Control de Stock</span>
+                    </a>
+                    
+                    <a href="{{ route('cafe.inventario.movimientos') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.inventario.movimientos') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
+                        <span>📈</span>
+                        <span class="font-medium">Movimientos</span>
+                    </a>
+                    
+                    <a href="{{ route('cafe.inventario.ajustar') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.inventario.ajustar') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
+                        <span>⚖️</span>
+                        <span class="font-medium">Ajustes</span>
+                    </a>
+
+                    <div class="pt-4 pb-2">
+                        <h3 class="text-xs uppercase tracking-wider font-semibold" style="color: #451a03 !important;">Compras</h3>
+                    </div>
+                    
+                    <a href="{{ route('cafe.proveedores.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.proveedores.*') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
+                        <span>🏪</span>
+                        <span class="font-medium">Proveedores</span>
+                    </a>
+                    
+                    <a href="{{ route('cafe.compras.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.compras.*') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
+                        <span>📦</span>
+                        <span class="font-medium">Compras</span>
+                    </a>
+
+                    <div class="pt-4 pb-2">
+                        <h3 class="text-xs uppercase tracking-wider font-semibold" style="color: #451a03 !important;">Clientes</h3>
+                    </div>
+                    
+                    <a href="{{ route('cafe.clientes.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.clientes.*') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
                         <span>👥</span>
                         <span class="font-medium">Clientes</span>
                     </a>
 
                     <div class="pt-4 pb-2">
-                        <h3 class="text-xs uppercase tracking-wider text-orange-400 font-semibold">Reportes</h3>
+                        <h3 class="text-xs uppercase tracking-wider font-semibold" style="color: #451a03 !important;">Reportes</h3>
                     </div>
                     
-                    <a href="{{ route('cafe.reportes.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.reportes.*') ? 'bg-amber-700 text-orange-100' : 'text-orange-300 hover:bg-amber-700 hover:text-orange-100' }} transition-colors duration-200">
-                        <span>📈</span>
+                    <a href="{{ route('cafe.reportes.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.reportes.*') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
+                        <span>📊</span>
                         <span class="font-medium">Reportes</span>
+                    </a>
+                    
+                    <a href="{{ route('cafe.inventario.reporte') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('cafe.inventario.reporte') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
+                        <span>📋</span>
+                        <span class="font-medium">Inventario</span>
                     </a>
                 </nav>
             </div>
 
             <!-- User Info -->
-            <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-amber-700">
+            <div class="mt-auto p-6 border-t border-amber-700">
                 <div class="flex items-center space-x-3">
                     <div class="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center">
-                        <span class="text-orange-100 text-sm font-medium">U</span>
+                        <span class="text-sm font-medium" style="color: #451a03 !important;">U</span>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-orange-100 truncate">{{ Session::get('user.name', 'Usuario') }}</p>
-                        <p class="text-xs text-orange-400 truncate">{{ Session::get('user.email', 'admin@scigop.com') }}</p>
+                        <p class="text-sm font-medium truncate" style="color: #451a03 !important;">{{ Session::get('user.name', 'Usuario') }}</p>
+                        <p class="text-xs truncate" style="color: #78350f !important;">{{ Session::get('user.email', 'admin@scigop.com') }}</p>
                     </div>
-                    <a href="{{ route('logout') }}" class="text-orange-300 hover:text-orange-100 transition-colors duration-200" title="Cerrar Sesión">
-                        <span>🚪</span>
+                    <a href="{{ route('logout') }}" class="text-amber-900 hover:text-amber-950 transition-colors duration-200 text-lg font-bold" title="Cerrar Sesión" style="color: #78350f !important;">
+                        <span>-</span>
                     </a>
                 </div>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 main-content">
+        <main class="flex-1 min-h-screen bg-orange-50">
+            <div class="p-4 md:p-8">
             <!-- Header -->
             <header class="mb-8">
                 <div class="flex items-center justify-between">
@@ -130,12 +177,33 @@
                 </div>
             @endif
 
-            <!-- Content -->
-            @yield('content')
+            <!-- Flash Messages -->
+            @if (session('success'))
+                <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div class="flex">
+                        <span class="text-green-600 mr-2">✅</span>
+                        <p class="text-green-800">{{ session('success') }}</p>
+                    </div>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div class="flex">
+                        <span class="text-red-600 mr-2">❌</span>
+                        <p class="text-red-800">{{ session('error') }}</p>
+                    </div>
+                </div>
+            @endif
+
+                <!-- Content -->
+                @yield('content')
+            </div>
         </main>
     </div>
 
     <!-- Scripts -->
     @stack('scripts')
+    
 </body>
 </html>

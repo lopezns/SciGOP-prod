@@ -28,6 +28,16 @@ class Producto extends Model
         return $this->hasMany(MovimientoInventario::class);
     }
     
+    public function detallesFactura()
+    {
+        return $this->hasMany(DetalleFacturaVenta::class);
+    }
+    
+    public function detallesCompra()
+    {
+        return $this->hasMany(DetalleCompra::class);
+    }
+    
     // Scopes
     public function scopeConStock($query)
     {

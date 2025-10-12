@@ -105,10 +105,21 @@ class DashboardController extends Controller
     
     private function getProductosMasVendidos()
     {
-        // Simulación básica - en un sistema real tendríamos tabla de detalles de factura
-        return Producto::orderBy('stock', 'desc')
-                      ->limit(10)
-                      ->get(['nombre', 'precio_venta', 'stock']);
+        // Ahora sí tenemos tabla de detalles de factura
+        return DB::table('detalle_factura_venta')
+                 ->join('productos', 'detalle_factura_venta.producto_id', '=', 'productos.id')
+                 ->join('facturas_venta', 'detalle_factura_venta.factura_id', '=', 'facturas_venta.id')
+                 ->where('facturas_venta.estado', 'pagada')
+                 ->select(
+                     'productos.nombre',
+                     'productos.precio_venta',
+                     DB::raw('SUM(detalle_factura_venta.cantidad) as total_vendido'),
+                     DB::raw('SUM(detalle_factura_venta.subtotal) as ingresos_totales')
+                 )
+                 ->groupBy('productos.id', 'productos.nombre', 'productos.precio_venta')
+                 ->orderBy('total_vendido', 'desc')
+                 ->limit(10)
+                 ->get();
     }
     
     private function getClientesFrecuentes()

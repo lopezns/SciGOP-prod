@@ -12,7 +12,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">Ventas de Hoy</h3>
-                    <p class="text-3xl font-bold text-green-600 mt-2">${{ number_format($ventasHoy, 0, ',', '.') }}</p>
+                    <p class="text-3xl font-bold text-green-600 mt-2">${{ number_format($ventasHoy, 0, '.', ',') }} COP</p>
                     <p class="text-sm text-gray-500 mt-1">
                         @if($ventasHoy > 0)
                             +{{ number_format(($ventasHoy / max($ventasMes, 1)) * 100, 1) }}% del mes
@@ -32,7 +32,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">Ventas del Mes</h3>
-                    <p class="text-3xl font-bold text-blue-600 mt-2">${{ number_format($ventasMes, 0, ',', '.') }}</p>
+                    <p class="text-3xl font-bold text-blue-600 mt-2">${{ number_format($ventasMes, 0, '.', ',') }} COP</p>
                     <p class="text-sm text-gray-500 mt-1">{{ $facturasMes }} facturas</p>
                 </div>
                 <div class="p-4 bg-blue-100 rounded-full">
@@ -97,7 +97,7 @@
                     <div class="flex flex-col items-center flex-1 group cursor-pointer">
                         <!-- Tooltip -->
                         <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 mb-2 bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg">
-                            <div class="font-semibold">${{ number_format($dia['total'], 0, ',', '.') }}</div>
+                            <div class="font-semibold">${{ number_format($dia['total'], 0, '.', ',') }} COP</div>
                             <div class="text-xs text-gray-300">{{ $dia['fecha'] }}</div>
                         </div>
                         
@@ -132,10 +132,10 @@
             <div class="mt-4 pt-4 border-t border-gray-200">
                 <div class="flex items-center justify-between text-sm">
                     <div class="text-gray-600">
-                        Promedio diario: <span class="font-semibold text-gray-800">${{ number_format(collect($ventasUltimosDias)->avg('total'), 0, ',', '.') }}</span>
+                        Promedio diario: <span class="font-semibold text-gray-800">${{ number_format(collect($ventasUltimosDias)->avg('total'), 0, '.', ',') }} COP</span>
                     </div>
                     <div class="text-gray-600">
-                        Total 7 días: <span class="font-semibold text-blue-600">${{ number_format(collect($ventasUltimosDias)->sum('total'), 0, ',', '.') }}</span>
+                        Total 7 días: <span class="font-semibold text-blue-600">${{ number_format(collect($ventasUltimosDias)->sum('total'), 0, '.', ',') }} COP</span>
                     </div>
                 </div>
             </div>
@@ -194,7 +194,7 @@
                     <div class="flex items-center justify-between py-2 border-b border-cream-100 last:border-b-0">
                         <div>
                             <p class="font-medium text-coffee-800">{{ $producto->nombre }}</p>
-                            <p class="text-sm text-coffee-600">${{ number_format($producto->precio_venta, 0, ',', '.') }}</p>
+                            <p class="text-sm text-coffee-600">${{ number_format($producto->precio_venta, 0, '.', ',') }} COP</p>
                         </div>
                         <span class="bg-coffee-100 text-coffee-800 px-2 py-1 rounded-full text-sm font-medium">
                             {{ $producto->stock }} unid.

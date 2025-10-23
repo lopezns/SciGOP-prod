@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
             FacturaVentaSeeder::class,
             ProveedorSeeder::class,
             CompraSeeder::class,
+            EmployeeSeeder::class,
+            PayrollSeeder::class,
         ]);
     }
 }

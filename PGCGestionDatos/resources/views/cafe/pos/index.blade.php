@@ -246,17 +246,19 @@ function updateCartDisplay() {
     cart.forEach(item => {
         subtotal += item.subtotal;
         html += `
-            <div class="flex items-center justify-between bg-orange-50 p-3 rounded-lg">
-                <div class="flex-1">
-                    <div class="font-medium text-sm">${item.nombre}</div>
+            <div class="flex items-center justify-between bg-orange-50 p-3 rounded-lg mb-2">
+                <div class="flex-1 min-w-0">
+                    <div class="font-medium text-sm truncate">${item.nombre}</div>
                     <div class="text-xs text-gray-600">$${numberFormat(item.precio)} COP c/u</div>
-                <div class="flex items-center gap-2">
-                    <button onclick="updateQuantity(${item.producto_id}, ${item.cantidad - 1})" class="w-6 h-6 bg-red-500 text-white text-xs rounded hover:bg-red-600">-</button>
-                    <span class="w-8 text-center text-sm font-semibold">${item.cantidad}</span>
-                    <button onclick="updateQuantity(${item.producto_id}, ${item.cantidad + 1})" class="w-6 h-6 bg-green-500 text-white text-xs rounded hover:bg-green-600">+</button>
+                    <div class="flex items-center gap-2 mt-1">
+                        <button onclick="updateQuantity(${item.producto_id}, ${item.cantidad - 1})" class="w-6 h-6 bg-red-500 text-white text-xs rounded hover:bg-red-600 flex items-center justify-center">-</button>
+                        <span class="w-8 text-center text-sm font-semibold bg-white px-1 rounded">${item.cantidad}</span>
+                        <button onclick="updateQuantity(${item.producto_id}, ${item.cantidad + 1})" class="w-6 h-6 bg-green-500 text-white text-xs rounded hover:bg-green-600 flex items-center justify-center">+</button>
+                    </div>
                 </div>
-                <div class="w-20 text-right">
-                    <div class="font-semibold text-sm">$${numberFormat(item.subtotal)} COP</div>
+                <div class="w-20 text-right flex-shrink-0 ml-2">
+                    <div class="font-semibold text-sm">$${numberFormat(item.subtotal)}</div>
+                    <div class="text-xs text-gray-500">COP</div>
                 </div>
             </div>
         `;

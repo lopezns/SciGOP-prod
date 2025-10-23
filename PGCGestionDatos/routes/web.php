@@ -57,10 +57,60 @@ Route::middleware('session.auth')->group(function () {
         return view('impuestos.index');
     })->name('taxes.index');
 
-    // Nómina
-    Route::get('/nomina', function () {
-        return view('nomina.index');
-    })->name('payroll.index');
+    // Nómina Dashboard
+    Route::get('/payroll', [\App\Http\Controllers\PayrollDashboardController::class, 'index'])->name('payroll.dashboard');
+    
+    // Empleados
+    Route::resource('employees', \App\Http\Controllers\EmployeeController::class);
+    
+    // Nóminas
+    Route::resource('payrolls', \App\Http\Controllers\PayrollController::class);
+    Route::post('/payrolls/{payroll}/calculate', [\App\Http\Controllers\PayrollController::class, 'calculate'])->name('payrolls.calculate');
+    Route::post('/payrolls/{payroll}/approve', [\App\Http\Controllers\PayrollController::class, 'approve'])->name('payrolls.approve');
+    Route::post('/payrolls/{payroll}/pay', [\App\Http\Controllers\PayrollController::class, 'pay'])->name('payrolls.pay');
+    
+    // Nómina (rutas compatibles)
+    Route::prefix('nomina')->name('payroll.')->group(function () {
+        Route::get('/', function () {
+            return view('nomina.index');
+        })->name('index');
+        
+        // Empleados
+        Route::resource('empleados', \App\Http\Controllers\EmployeeController::class)->parameters([
+            'empleados' => 'employee'
+        ]);
+        
+        // Nóminas
+        Route::resource('nominas', \App\Http\Controllers\PayrollController::class)->parameters([
+            'nominas' => 'payroll'
+        ]);
+        Route::post('/nominas/{payroll}/calcular', [\App\Http\Controllers\PayrollController::class, 'calculate'])->name('nominas.calculate');
+        Route::post('/nominas/{payroll}/aprobar', [\App\Http\Controllers\PayrollController::class, 'approve'])->name('nominas.approve');
+        Route::post('/nominas/{payroll}/pagar', [\App\Http\Controllers\PayrollController::class, 'pay'])->name('nominas.pay');
+    });
+    
+    // DIAN - Sistema de Información Tributaria
+    Route::prefix('dian')->name('dian.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\DianController::class, 'index'])->name('index');
+        Route::get('/declaraciones', [\App\Http\Controllers\DianController::class, 'declaraciones'])->name('declaraciones');
+        Route::get('/retenciones', [\App\Http\Controllers\DianController::class, 'retenciones'])->name('retenciones');
+        Route::get('/certificacion', [\App\Http\Controllers\DianController::class, 'certificacion'])->name('certificacion');
+        Route::get('/aportes-parafiscales', [\App\Http\Controllers\DianController::class, 'aportes'])->name('aportes');
+    });
+    
+    // Reportes
+    Route::prefix('reportes')->name('reports.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ReportController::class, 'index'])->name('index');
+        Route::get('/data', [\App\Http\Controllers\ReportController::class, 'getReportData'])->name('data');
+        
+        // Reportes PDF
+        Route::get('/nomina/pdf', [\App\Http\Controllers\ReportController::class, 'payrollPDF'])->name('payroll.pdf');
+        Route::post('/nomina', [\App\Http\Controllers\ReportController::class, 'payrollReport'])->name('payroll');
+        Route::post('/ventas', [\App\Http\Controllers\ReportController::class, 'salesReport'])->name('sales');
+        Route::post('/inventario', [\App\Http\Controllers\ReportController::class, 'inventoryReport'])->name('inventory');
+        Route::get('/dian/certificado/pdf', [\App\Http\Controllers\ReportController::class, 'dianCertificatePDF'])->name('dian.certificate.pdf');
+        Route::post('/dian-ingresos', [\App\Http\Controllers\ReportController::class, 'dianIncomeReport'])->name('dian.income');
+    });
 
     // Inventario
     Route::get('/inventario', function () {

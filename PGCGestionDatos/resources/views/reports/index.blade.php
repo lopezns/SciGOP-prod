@@ -20,55 +20,6 @@
     </div>
 
     <div class="row">
-        <!-- Reporte de Nómina -->
-        <div class="col-lg-6 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-people-fill text-primary"></i> Reporte de Nómina
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">Generar reporte detallado de nómina con cálculos DIAN, aportes patronales y deducciones.</p>
-                    
-                    <form action="{{ route('reports.payroll') }}" method="POST" target="_blank">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="payroll_start_date" class="form-label">Fecha Inicio</label>
-                                <input type="date" class="form-control" id="payroll_start_date" name="start_date" 
-                                       value="{{ date('Y-m-01') }}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="payroll_end_date" class="form-label">Fecha Fin</label>
-                                <input type="date" class="form-control" id="payroll_end_date" name="end_date" 
-                                       value="{{ date('Y-m-t') }}" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="employee_id" class="form-label">Empleado (Opcional)</label>
-                                <select class="form-select" id="employee_id" name="employee_id">
-                                    <option value="">Todos los empleados</option>
-                                    <!-- Se llenarán dinámicamente -->
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="department" class="form-label">Departamento (Opcional)</label>
-                                <select class="form-select" id="department" name="department">
-                                    <option value="">Todos los departamentos</option>
-                                    <!-- Se llenarán dinámicamente -->
-                                </select>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-file-earmark-pdf"></i> Generar PDF
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
         <!-- Reporte de Ventas -->
         <div class="col-lg-6 mb-4">
             <div class="card">
@@ -116,46 +67,6 @@
                     <form action="{{ route('reports.inventory') }}" method="POST" target="_blank">
                         @csrf
                         <button type="submit" class="btn btn-warning">
-                            <i class="bi bi-file-earmark-pdf"></i> Generar PDF
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Certificado DIAN -->
-        <div class="col-lg-6 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-file-earmark-text text-info"></i> Certificado DIAN
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">Certificado de ingresos y retenciones para empleados (DIAN).</p>
-                    
-                    <form action="{{ route('reports.dian.income') }}" method="POST" target="_blank">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="dian_employee_id" class="form-label">Empleado</label>
-                                <select class="form-select" id="dian_employee_id" name="employee_id" required>
-                                    <option value="">Seleccionar empleado</option>
-                                    <!-- Se llenarán dinámicamente -->
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="dian_year" class="form-label">Año</label>
-                                <select class="form-select" id="dian_year" name="year" required>
-                                    @for($year = date('Y'); $year >= 2020; $year--)
-                                        <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>
-                                            {{ $year }}
-                                        </option>
-                                    @endfor
-                                </select>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-info">
                             <i class="bi bi-file-earmark-pdf"></i> Generar PDF
                         </button>
                     </form>
@@ -219,43 +130,10 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    loadEmployeesData();
     loadPayrollSummary();
 });
 
-function loadEmployeesData() {
-    fetch('{{ route("reports.data") }}?type=employees')
-        .then(response => response.json())
-        .then(data => {
-            // Llenar select de empleados
-            const employeeSelects = ['employee_id', 'dian_employee_id'];
-            employeeSelects.forEach(selectId => {
-                const select = document.getElementById(selectId);
-                if (select) {
-                    data.employees.forEach(employee => {
-                        const option = document.createElement('option');
-                        option.value = employee.id;
-                        option.textContent = `${employee.first_name} ${employee.last_name} - ${employee.document_number}`;
-                        select.appendChild(option);
-                    });
-                }
-            });
-
-            // Llenar select de departamentos
-            const departmentSelect = document.getElementById('department');
-            if (departmentSelect && data.departments) {
-                data.departments.forEach(dept => {
-                    const option = document.createElement('option');
-                    option.value = dept;
-                    option.textContent = dept;
-                    departmentSelect.appendChild(option);
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error loading employees data:', error);
-        });
-}
+// Función removida - ya no hay formularios de empleados
 
 function loadPayrollSummary() {
     fetch('{{ route("reports.data") }}?type=payroll_summary')

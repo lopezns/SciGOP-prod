@@ -104,48 +104,6 @@
                         <span class="font-medium">Clientes</span>
                     </a>
 
-                    <div class="pt-4 pb-2">
-                        <h3 class="text-xs uppercase tracking-wider font-semibold" style="color: #451a03 !important;">Nómina</h3>
-                    </div>
-                    
-                    <a href="{{ route('payroll.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('payroll.index') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
-                        <span>💼</span>
-                        <span class="font-medium">Dashboard</span>
-                    </a>
-                    
-                    <a href="{{ route('payroll.empleados.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('payroll.empleados.*') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
-                        <span>👥</span>
-                        <span class="font-medium">Empleados</span>
-                    </a>
-                    
-                    <a href="{{ route('payroll.nominas.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('payroll.nominas.*') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
-                        <span>💰</span>
-                        <span class="font-medium">Nóminas</span>
-                    </a>
-
-                    <div class="pt-4 pb-2">
-                        <h3 class="text-xs uppercase tracking-wider font-semibold" style="color: #451a03 !important;">DIAN</h3>
-                    </div>
-                    
-                    <a href="{{ route('dian.declaraciones') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('dian.declaraciones') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
-                        <span>📄</span>
-                        <span class="font-medium">Declaraciones</span>
-                    </a>
-                    
-                    <a href="{{ route('dian.retenciones') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('dian.retenciones') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
-                        <span>🧾</span>
-                        <span class="font-medium">Retenciones</span>
-                    </a>
-                    
-                    <a href="{{ route('dian.certificacion') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('dian.certificacion') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
-                        <span>🏆</span>
-                        <span class="font-medium">Certificados</span>
-                    </a>
-                    
-                    <a href="{{ route('dian.aportes') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('dian.aportes') ? 'bg-amber-700' : 'hover:bg-amber-700' }} transition-colors duration-200" style="color: #451a03 !important;">
-                        <span>💵</span>
-                        <span class="font-medium">Aportes Parafiscales</span>
-                    </a>
 
                     <div class="pt-4 pb-2">
                         <h3 class="text-xs uppercase tracking-wider font-semibold" style="color: #451a03 !important;">Reportes</h3>
